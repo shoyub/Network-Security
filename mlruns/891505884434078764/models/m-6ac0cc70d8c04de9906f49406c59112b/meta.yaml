@@ -1,0 +1,10 @@
+artifact_location: file:D:/DS/ML project-2/networksecurity/mlruns/891505884434078764/models/m-6ac0cc70d8c04de9906f49406c59112b/artifacts
+creation_timestamp: 1773777832137
+experiment_id: '891505884434078764'
+last_updated_timestamp: 1773777836942
+model_id: m-6ac0cc70d8c04de9906f49406c59112b
+model_type: null
+name: model
+source_run_id: a790123b805249ae990271ee3d8dfd71
+status: 2
+status_message: null

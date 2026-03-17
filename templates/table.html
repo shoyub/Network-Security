@@ -1,21 +1,514 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-    <title>Data Table</title>
+  <head>
+    <title>Prediction Results</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
     <style>
-        table {
-            border-collapse: collapse;
-            width: 100%;
+      :root {
+        --black: #0a0a0a;
+        --white: #f5f5f0;
+        --mid: #888;
+        --light: #d4d4d0;
+        --danger-bg: #1a0000;
+        --danger-text: #ff4444;
+        --safe-bg: #001a04;
+        --safe-text: #44cc66;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "DM Sans", sans-serif;
+        background: var(--white);
+        min-height: 100vh;
+        padding: 40px 20px;
+        position: relative;
+        overflow-x: hidden;
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background-image:
+          linear-gradient(rgba(10, 10, 10, 0.04) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(10, 10, 10, 0.04) 1px, transparent 1px);
+        background-size: 40px 40px;
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      body::after {
+        content: "";
+        position: fixed;
+        top: 30px;
+        right: 30px;
+        width: 60px;
+        height: 60px;
+        border-top: 2px solid var(--black);
+        border-right: 2px solid var(--black);
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      .corner-bl {
+        position: fixed;
+        bottom: 30px;
+        left: 30px;
+        width: 60px;
+        height: 60px;
+        border-bottom: 2px solid var(--black);
+        border-left: 2px solid var(--black);
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      .container {
+        position: relative;
+        z-index: 1;
+        max-width: 1200px;
+        margin: 0 auto;
+        background: var(--white);
+        border: 2px solid var(--black);
+        box-shadow: 8px 8px 0 var(--black);
+        animation: slideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+      }
+
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateY(24px);
         }
-        th, td {
-            border: 1px solid black;
-            padding: 8px;
-            text-align: left;
+        to {
+          opacity: 1;
+          transform: translateY(0);
         }
+      }
+
+      /* ── Header ── */
+      .header {
+        background: var(--black);
+        padding: 28px 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .header::before {
+        content: "RESULTS";
+        position: absolute;
+        right: -8px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 5.5em;
+        color: rgba(255, 255, 255, 0.04);
+        letter-spacing: 0.05em;
+        pointer-events: none;
+        white-space: nowrap;
+      }
+
+      .header-left .header-tag {
+        font-family: "DM Mono", monospace;
+        font-size: 0.68em;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--mid);
+        margin-bottom: 6px;
+      }
+
+      .header-left h2 {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 2.6em;
+        letter-spacing: 0.04em;
+        color: var(--white);
+        line-height: 1;
+      }
+
+      .button-group {
+        display: flex;
+        gap: 10px;
+        position: relative;
+        z-index: 1;
+      }
+
+      .btn {
+        padding: 10px 20px;
+        font-family: "DM Mono", monospace;
+        font-size: 0.72em;
+        font-weight: 500;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        border: 2px solid var(--white);
+        cursor: pointer;
+        transition: all 0.2s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .back-btn {
+        background: transparent;
+        color: var(--white);
+      }
+
+      .back-btn::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: var(--white);
+        transform: translateX(-100%);
+        transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        z-index: 0;
+      }
+
+      .back-btn:hover::after {
+        transform: translateX(0);
+      }
+      .back-btn:hover {
+        color: var(--black);
+      }
+      .back-btn span {
+        position: relative;
+        z-index: 1;
+      }
+
+      .download-btn {
+        background: var(--white);
+        color: var(--black);
+      }
+
+      .download-btn::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: var(--black);
+        transform: translateX(-100%);
+        transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        z-index: 0;
+      }
+
+      .download-btn:hover::after {
+        transform: translateX(0);
+      }
+      .download-btn:hover {
+        color: var(--white);
+      }
+      .download-btn span {
+        position: relative;
+        z-index: 1;
+      }
+
+      /* ── Stats bar ── */
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        border-bottom: 2px solid var(--black);
+      }
+
+      .stat-card {
+        padding: 24px 32px;
+        border-right: 1px solid var(--light);
+        position: relative;
+      }
+
+      .stat-card:last-child {
+        border-right: none;
+      }
+
+      .stat-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 3px;
+        height: 100%;
+        background: var(--black);
+        transform: scaleY(0);
+        transform-origin: top;
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .stat-card.loaded::before {
+        transform: scaleY(1);
+      }
+
+      .stat-label {
+        font-family: "DM Mono", monospace;
+        font-size: 0.65em;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--mid);
+        margin-bottom: 6px;
+      }
+
+      .stat-value {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 3em;
+        color: var(--black);
+        line-height: 1;
+        letter-spacing: 0.02em;
+      }
+
+      .stat-value.danger {
+        color: var(--danger-text);
+      }
+      .stat-value.safe {
+        color: var(--safe-text);
+      }
+
+      /* ── Table ── */
+      .table-section {
+        padding: 32px 40px 40px;
+      }
+
+      .table-section-label {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 18px;
+      }
+
+      .table-section-label .label-text {
+        font-family: "DM Mono", monospace;
+        font-size: 0.72em;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--black);
+      }
+
+      .table-section-label .divider {
+        flex: 1;
+        height: 1px;
+        background: var(--light);
+      }
+
+      .table-wrapper {
+        overflow-x: auto;
+        border: 2px solid var(--black);
+      }
+
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        background: var(--white);
+      }
+
+      th {
+        background: var(--black);
+        color: var(--white);
+        padding: 13px 16px;
+        text-align: left;
+        font-family: "DM Mono", monospace;
+        font-size: 0.72em;
+        font-weight: 500;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        white-space: nowrap;
+      }
+
+      td {
+        padding: 11px 16px;
+        border-bottom: 1px solid var(--light);
+        font-family: "DM Mono", monospace;
+        font-size: 0.78em;
+        color: var(--black);
+      }
+
+      tr:last-child td {
+        border-bottom: none;
+      }
+
+      tr:hover td {
+        background: rgba(10, 10, 10, 0.03);
+      }
+
+      .phishing {
+        display: inline-block;
+        background: var(--danger-bg);
+        color: var(--danger-text);
+        font-family: "DM Mono", monospace;
+        font-size: 0.85em;
+        font-weight: 500;
+        letter-spacing: 0.1em;
+        padding: 3px 8px;
+        border: 1px solid var(--danger-text);
+        text-transform: uppercase;
+      }
+
+      .legitimate {
+        display: inline-block;
+        background: var(--safe-bg);
+        color: var(--safe-text);
+        font-family: "DM Mono", monospace;
+        font-size: 0.85em;
+        font-weight: 500;
+        letter-spacing: 0.1em;
+        padding: 3px 8px;
+        border: 1px solid var(--safe-text);
+        text-transform: uppercase;
+      }
+
+      /* ── Footer ── */
+      .footer {
+        border-top: 1px solid var(--light);
+        padding: 14px 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .footer-text {
+        font-family: "DM Mono", monospace;
+        font-size: 0.65em;
+        color: var(--light);
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+      }
+
+      /* ── Responsive ── */
+      @media (max-width: 700px) {
+        .container {
+          box-shadow: 4px 4px 0 var(--black);
+        }
+        .header {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 16px;
+          padding: 24px;
+        }
+        .button-group {
+          width: 100%;
+        }
+        .btn {
+          flex: 1;
+          text-align: center;
+        }
+        .stats {
+          grid-template-columns: 1fr;
+        }
+        .stat-card {
+          border-right: none;
+          border-bottom: 1px solid var(--light);
+        }
+        .table-section {
+          padding: 24px;
+        }
+        .footer {
+          padding: 14px 24px;
+        }
+      }
     </style>
-</head>
-<body>
-    <h2>Predicted Data</h2>
-    {{ table | safe }}
-</body>
+  </head>
+  <body>
+    <div class="corner-bl"></div>
+
+    <div class="container">
+      <!-- Header -->
+      <div class="header">
+        <div class="header-left">
+          <div class="header-tag">Analysis Complete</div>
+          <h2>Prediction Results</h2>
+        </div>
+        <div class="button-group">
+          <button class="btn download-btn" onclick="downloadCSV()">
+            <span>↓ Download CSV</span>
+          </button>
+          <button class="btn back-btn" onclick="goHome()">
+            <span>← Back to Home</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats">
+        <div class="stat-card">
+          <div class="stat-label">Total Records</div>
+          <div class="stat-value" id="totalRecords">—</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Phishing Detected</div>
+          <div class="stat-value danger" id="phishingCount">—</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Legitimate</div>
+          <div class="stat-value safe" id="legitimateCount">—</div>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="table-section">
+        <div class="table-section-label">
+          <span class="label-text">Detailed Records</span>
+          <div class="divider"></div>
+        </div>
+        <div class="table-wrapper">{{ table | safe }}</div>
+      </div>
+
+      <!-- Footer -->
+      <div class="footer">
+        <div class="footer-text">ML-based classifier</div>
+        <div class="footer-text">CSV input only</div>
+      </div>
+    </div>
+
+    <script>
+      function goHome() {
+        window.location.href = "/";
+      }
+
+      function downloadCSV() {
+        const link = document.createElement("a");
+        link.href = "/prediction_output/output.csv";
+        link.download = "predictions.csv";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+
+      function calculateStats() {
+        const table = document.querySelector("table");
+        if (!table) return;
+        const rows = table.querySelectorAll("tbody tr");
+        let phishing = 0,
+          legitimate = 0;
+
+        rows.forEach((row) => {
+          const cells = row.querySelectorAll("td");
+          const lastCell = cells[cells.length - 1];
+          const text = lastCell.textContent.trim();
+
+          lastCell.innerHTML = "";
+          if (text.includes("Phishing")) {
+            phishing++;
+            lastCell.innerHTML = '<span class="phishing">⚠ Phishing</span>';
+          } else if (text.includes("Legitimate")) {
+            legitimate++;
+            lastCell.innerHTML = '<span class="legitimate">✓ Legitimate</span>';
+          } else {
+            lastCell.textContent = text;
+          }
+        });
+
+        document.getElementById("totalRecords").textContent = rows.length;
+        document.getElementById("phishingCount").textContent = phishing;
+        document.getElementById("legitimateCount").textContent = legitimate;
+
+        // Animate stat bars
+        document.querySelectorAll(".stat-card").forEach((c, i) => {
+          setTimeout(() => c.classList.add("loaded"), i * 120);
+        });
+      }
+
+      window.addEventListener("load", calculateStats);
+    </script>
+  </body>
 </html>

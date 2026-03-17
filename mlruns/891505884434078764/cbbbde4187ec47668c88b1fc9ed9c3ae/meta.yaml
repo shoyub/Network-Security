@@ -1,0 +1,14 @@
+artifact_uri: file:D:/DS/ML project-2/networksecurity/mlruns/891505884434078764/cbbbde4187ec47668c88b1fc9ed9c3ae/artifacts
+end_time: 1773771496873
+entry_point_name: ''
+experiment_id: '891505884434078764'
+lifecycle_stage: active
+run_id: cbbbde4187ec47668c88b1fc9ed9c3ae
+run_name: persistent-fish-247
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1773771491555
+status: 3
+tags: []
+user_id: Shoyub

@@ -1,0 +1,14 @@
+artifact_uri: file:D:/DS/ML project-2/networksecurity/mlruns/891505884434078764/43a6dead07944aa5b2c885ce575fba82/artifacts
+end_time: 1773773107707
+entry_point_name: ''
+experiment_id: '891505884434078764'
+lifecycle_stage: active
+run_id: 43a6dead07944aa5b2c885ce575fba82
+run_name: thundering-worm-642
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1773773103183
+status: 3
+tags: []
+user_id: Shoyub

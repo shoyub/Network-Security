@@ -1,0 +1,14 @@
+artifact_uri: file:D:/DS/ML project-2/networksecurity/mlruns/891505884434078764/2f45208510fa4d99a795751e316c6a21/artifacts
+end_time: 1773774752029
+entry_point_name: ''
+experiment_id: '891505884434078764'
+lifecycle_stage: active
+run_id: 2f45208510fa4d99a795751e316c6a21
+run_name: learned-crane-723
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1773774744166
+status: 3
+tags: []
+user_id: Shoyub

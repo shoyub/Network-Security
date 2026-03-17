@@ -1,0 +1,670 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Phishing Detection System</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --black: #0a0a0a;
+        --white: #f5f5f0;
+        --mid: #888;
+        --light: #d4d4d0;
+        --accent: #1a1a1a;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "DM Sans", sans-serif;
+        background: var(--white);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        padding: 20px;
+        position: relative;
+        overflow-y: auto;
+        padding-top: 40px;
+      }
+
+      /* Background grid */
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background-image:
+          linear-gradient(rgba(10, 10, 10, 0.04) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(10, 10, 10, 0.04) 1px, transparent 1px);
+        background-size: 40px 40px;
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      /* Decorative corner marks */
+      body::after {
+        content: "";
+        position: fixed;
+        top: 30px;
+        right: 30px;
+        width: 80px;
+        height: 80px;
+        border-top: 2px solid var(--black);
+        border-right: 2px solid var(--black);
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      .corner-bl {
+        position: fixed;
+        bottom: 30px;
+        left: 30px;
+        width: 80px;
+        height: 80px;
+        border-bottom: 2px solid var(--black);
+        border-left: 2px solid var(--black);
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      .container {
+        position: relative;
+        z-index: 1;
+        background: var(--white);
+        border: 2px solid var(--black);
+        max-width: 580px;
+        width: 100%;
+        padding: 0;
+        box-shadow: 8px 8px 0px var(--black);
+        animation: slideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+      }
+
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Header */
+      .header {
+        background: var(--black);
+        color: var(--white);
+        padding: 32px 40px 28px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .header::before {
+        content: "SECURITY";
+        position: absolute;
+        right: -10px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 5.5em;
+        color: rgba(255, 255, 255, 0.04);
+        letter-spacing: 0.05em;
+        pointer-events: none;
+        white-space: nowrap;
+      }
+
+      .header-tag {
+        font-family: "DM Mono", monospace;
+        font-size: 0.7em;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--mid);
+        margin-bottom: 8px;
+      }
+
+      h1 {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 3em;
+        letter-spacing: 0.04em;
+        color: var(--white);
+        line-height: 1;
+        margin-bottom: 6px;
+      }
+
+      .subtitle {
+        font-family: "DM Sans", sans-serif;
+        font-size: 0.82em;
+        color: var(--mid);
+        font-weight: 300;
+        letter-spacing: 0.05em;
+      }
+
+      /* Status bar */
+      .status-bar {
+        background: var(--black);
+        border-top: 1px solid #222;
+        padding: 8px 40px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .status-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: #4caf50;
+        animation: pulse 2s ease-in-out infinite;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.3;
+        }
+      }
+
+      .status-text {
+        font-family: "DM Mono", monospace;
+        font-size: 0.68em;
+        color: var(--mid);
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      /* Body */
+      .body {
+        padding: 36px 40px 40px;
+      }
+
+      /* Section */
+      .section {
+        margin-bottom: 32px;
+      }
+
+      .section:last-child {
+        margin-bottom: 0;
+      }
+
+      .section-label {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 16px;
+      }
+
+      .section-num {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 1.1em;
+        color: var(--white);
+        background: var(--black);
+        width: 28px;
+        height: 28px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+
+      .section-title {
+        font-family: "DM Mono", monospace;
+        font-size: 0.75em;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--black);
+        font-weight: 500;
+      }
+
+      .divider {
+        flex: 1;
+        height: 1px;
+        background: var(--light);
+      }
+
+      /* Train button */
+      .train-btn {
+        width: 100%;
+        padding: 14px 24px;
+        font-family: "DM Mono", monospace;
+        font-size: 0.85em;
+        font-weight: 500;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        background: var(--black);
+        color: var(--white);
+        border: 2px solid var(--black);
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .train-btn::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: var(--white);
+        transform: translateX(-100%);
+        transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        z-index: 0;
+      }
+
+      .train-btn:hover::after {
+        transform: translateX(0);
+      }
+
+      .train-btn:hover {
+        color: var(--black);
+      }
+
+      .train-btn span {
+        position: relative;
+        z-index: 1;
+      }
+
+      .train-btn:active {
+        transform: translate(2px, 2px);
+        box-shadow: none;
+      }
+
+      /* File upload */
+      .file-input-wrapper {
+        position: relative;
+        margin-bottom: 12px;
+      }
+
+      .file-input-wrapper input[type="file"] {
+        position: absolute;
+        left: -9999px;
+      }
+
+      .file-label {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 14px 20px;
+        background: transparent;
+        border: 2px dashed var(--light);
+        cursor: pointer;
+        transition: all 0.2s ease;
+        color: var(--mid);
+      }
+
+      .file-label:hover {
+        border-color: var(--black);
+        color: var(--black);
+      }
+
+      .file-label.has-file {
+        border-style: solid;
+        border-color: var(--black);
+        color: var(--black);
+      }
+
+      .file-icon {
+        font-size: 1.1em;
+        flex-shrink: 0;
+      }
+
+      .file-label-text {
+        font-family: "DM Mono", monospace;
+        font-size: 0.76em;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+      }
+
+      .file-name {
+        font-family: "DM Mono", monospace;
+        font-size: 0.72em;
+        color: var(--mid);
+        padding: 0 4px;
+        margin-bottom: 12px;
+        letter-spacing: 0.05em;
+        min-height: 18px;
+      }
+
+      /* Predict button */
+      .predict-btn {
+        width: 100%;
+        padding: 14px 24px;
+        font-family: "DM Mono", monospace;
+        font-size: 0.85em;
+        font-weight: 500;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        background: transparent;
+        color: var(--black);
+        border: 2px solid var(--black);
+        cursor: pointer;
+        transition: all 0.2s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .predict-btn::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: var(--black);
+        transform: translateX(-100%);
+        transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        z-index: 0;
+      }
+
+      .predict-btn:hover::after {
+        transform: translateX(0);
+      }
+
+      .predict-btn:hover {
+        color: var(--white);
+      }
+
+      .predict-btn span {
+        position: relative;
+        z-index: 1;
+      }
+
+      .predict-btn:active {
+        transform: translate(2px, 2px);
+      }
+
+      /* URL Input */
+      .url-input {
+        width: 100%;
+        padding: 14px 20px;
+        font-family: "DM Mono", monospace;
+        font-size: 0.85em;
+        letter-spacing: 0.05em;
+        background: transparent;
+        border: 2px solid var(--light);
+        color: var(--black);
+        transition: all 0.2s ease;
+        margin-bottom: 8px;
+      }
+
+      .url-input:hover {
+        border-color: var(--black);
+      }
+
+      .url-input:focus {
+        outline: none;
+        border-color: var(--black);
+        background: #f9f9f9;
+      }
+
+      .url-input::placeholder {
+        color: var(--mid);
+      }
+
+      .url-input-hint {
+        font-family: "DM Mono", monospace;
+        font-size: 0.72em;
+        color: var(--mid);
+        padding: 0 4px;
+        margin-bottom: 16px;
+        letter-spacing: 0.05em;
+        min-height: 20px;
+      }
+
+      /* URL form button styling */
+      #urlPredictForm .predict-btn {
+        margin-top: 8px;
+        padding: 16px 24px;
+      }
+
+      #urlPredictForm .predict-btn span {
+        font-size: 1.1em;
+      }
+
+      /* Footer */
+      .footer {
+        border-top: 1px solid var(--light);
+        padding: 14px 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .footer-text {
+        font-family: "DM Mono", monospace;
+        font-size: 0.65em;
+        color: var(--light);
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+      }
+
+      @media (max-width: 520px) {
+        .container {
+          box-shadow: 4px 4px 0 var(--black);
+        }
+        .header,
+        .body {
+          padding-left: 24px;
+          padding-right: 24px;
+        }
+        .status-bar,
+        .footer {
+          padding-left: 24px;
+          padding-right: 24px;
+        }
+        h1 {
+          font-size: 2.4em;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="corner-bl"></div>
+
+    <div class="container">
+      <!-- Header -->
+      <div class="header">
+        <div class="header-tag">v2.1.0 — Active</div>
+        <h1>Phishing<br />Detection</h1>
+        <div class="subtitle">Network Security Analysis System</div>
+      </div>
+
+      <!-- Status bar -->
+      <div class="status-bar">
+        <div class="status-dot"></div>
+        <div class="status-text">System Online &nbsp;/&nbsp; Model Ready</div>
+      </div>
+
+      <!-- Body -->
+      <div class="body">
+        <!-- Train -->
+        <div class="section">
+          <div class="section-label">
+            <div class="section-num">01</div>
+            <div class="section-title">Model Training</div>
+            <div class="divider"></div>
+          </div>
+          <form action="/train" method="get">
+            <button type="submit" class="train-btn">
+              <span>↑ Initialize Training</span>
+            </button>
+          </form>
+        </div>
+
+        <!-- CSV Prediction -->
+        <div class="section">
+          <div class="section-label">
+            <div class="section-num">02</div>
+            <div class="section-title">CSV Prediction</div>
+            <div class="divider"></div>
+          </div>
+          <form
+            action="/predict"
+            method="post"
+            enctype="multipart/form-data"
+            id="predictForm"
+          >
+            <div class="file-input-wrapper">
+              <input
+                type="file"
+                name="file"
+                id="fileInput"
+                accept=".csv"
+                required
+              />
+              <label for="fileInput" class="file-label" id="fileLabel">
+                <span class="file-icon">⊞</span>
+                <span class="file-label-text">Select CSV Dataset</span>
+              </label>
+            </div>
+            <div class="file-name" id="fileName"></div>
+            <button type="submit" class="predict-btn">
+              <span>→ Upload &amp; Predict</span>
+            </button>
+          </form>
+        </div>
+
+        <!-- URL Prediction -->
+        <div class="section">
+          <div class="section-label">
+            <div class="section-num">03</div>
+            <div class="section-title">URL Prediction</div>
+            <div class="divider"></div>
+          </div>
+          <form id="urlPredictForm">
+            <input
+              type="text"
+              id="urlInput"
+              placeholder="Enter URL (e.g., https://example.com)"
+              class="url-input"
+              required
+            />
+            <div class="url-input-hint" id="urlHint"></div>
+            <button type="submit" class="predict-btn">
+              <span>→ Check URL</span>
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="footer">
+        <div class="footer-text">ML-based classifier</div>
+        <div class="footer-text">CSV &amp; URL support</div>
+      </div>
+    </div>
+
+    <script>
+      const fileInput = document.getElementById("fileInput");
+      const fileLabel = document.getElementById("fileLabel");
+      const fileName = document.getElementById("fileName");
+      const urlInput = document.getElementById("urlInput");
+      const urlPredictForm = document.getElementById("urlPredictForm");
+      const urlHint = document.getElementById("urlHint");
+
+      // CSV file input handlers
+      fileInput.addEventListener("change", function () {
+        if (this.files.length > 0) {
+          fileName.textContent = "✓  " + this.files[0].name;
+          fileLabel.classList.add("has-file");
+          fileLabel.querySelector(".file-label-text").textContent =
+            "File Selected";
+        }
+      });
+
+      fileLabel.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        fileLabel.classList.add("has-file");
+      });
+      fileLabel.addEventListener("dragleave", (e) => {
+        e.preventDefault();
+        if (!fileInput.files.length) fileLabel.classList.remove("has-file");
+      });
+      fileLabel.addEventListener("drop", function (e) {
+        e.preventDefault();
+        if (e.dataTransfer.files.length > 0) {
+          fileInput.files = e.dataTransfer.files;
+          fileName.textContent = "✓  " + e.dataTransfer.files[0].name;
+          fileLabel.classList.add("has-file");
+          fileLabel.querySelector(".file-label-text").textContent =
+            "File Selected";
+        }
+      });
+
+      // URL input handlers
+      urlInput.addEventListener("input", function () {
+        if (this.value.length > 0) {
+          urlHint.textContent = "✓  URL ready for analysis";
+        } else {
+          urlHint.textContent = "";
+        }
+      });
+
+      // URL form submission
+      urlPredictForm.addEventListener("submit", async function (e) {
+        e.preventDefault();
+
+        const url = urlInput.value.trim();
+        if (!url) {
+          urlHint.textContent = "✗  Please enter a valid URL";
+          return;
+        }
+
+        // Validate URL format
+        try {
+          new URL(url);
+        } catch (_) {
+          urlHint.textContent = "✗  Invalid URL format";
+          return;
+        }
+
+        try {
+          // Show loading state
+          const button = this.querySelector(".predict-btn span");
+          const originalText = button.textContent;
+          button.textContent = "⟳ Analyzing...";
+
+          // Send to backend
+          const response = await fetch("/predict-url", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ url: url }),
+          });
+
+          const result = await response.json();
+
+          if (result.success) {
+            // Build query string for result page
+            const params = new URLSearchParams({
+              url: result.url,
+              prediction: result.prediction,
+              confidence: result.confidence,
+              phishing_score: result.phishing_score || 0,
+            });
+            window.location.href = `/url-result?${params.toString()}`;
+          } else {
+            // Show error message
+            urlHint.textContent = `✗  ${result.error || "Analysis failed"}`;
+            const button = this.querySelector(".predict-btn span");
+            button.textContent = originalText || "→ Check URL";
+          }
+        } catch (error) {
+          urlHint.textContent = `✗  Error: ${error.message || "Connection failed"}`;
+          const button = this.querySelector(".predict-btn span");
+          button.textContent = originalText || "→ Check URL";
+          console.error("Error:", error);
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,14 @@
+artifact_uri: file:D:/DS/ML project-2/networksecurity/mlruns/891505884434078764/c50a957e97ce40c29ef15c73e2a8963e/artifacts
+end_time: 1773778125155
+entry_point_name: ''
+experiment_id: '891505884434078764'
+lifecycle_stage: active
+run_id: c50a957e97ce40c29ef15c73e2a8963e
+run_name: bald-kit-318
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1773778120246
+status: 3
+tags: []
+user_id: Shoyub

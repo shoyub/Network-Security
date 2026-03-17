@@ -1,0 +1,30 @@
+[ 2026-03-18 00:13:49,326 ] 20 root - INFO - Initiate the data ingestion
+[ 2026-03-18 00:13:57,436 ] 77 root - INFO - Performed train-test split
+[ 2026-03-18 00:13:57,557 ] 94 root - INFO - Train and test files saved successfully
+[ 2026-03-18 00:13:57,559 ] 22 root - INFO - Data Initiation Completed
+[ 2026-03-18 00:13:57,575 ] 26 root - INFO - Initiate the data Validation
+[ 2026-03-18 00:13:57,707 ] 32 root - INFO - Required number of columns:2
+[ 2026-03-18 00:13:57,707 ] 33 root - INFO - Data frame has columns:31
+[ 2026-03-18 00:13:57,707 ] 32 root - INFO - Required number of columns:2
+[ 2026-03-18 00:13:57,708 ] 33 root - INFO - Data frame has columns:31
+[ 2026-03-18 00:13:57,984 ] 28 root - INFO - data Validation Completed
+[ 2026-03-18 00:13:57,986 ] 31 root - INFO - data Transformation started
+[ 2026-03-18 00:13:57,986 ] 63 root - INFO - Entered initiate_data_transformation method of DataTransformation class
+[ 2026-03-18 00:13:57,986 ] 65 root - INFO - Starting data transformation
+[ 2026-03-18 00:13:58,042 ] 48 root - INFO - Entered get_data_trnasformer_object method of Trnasformation class
+[ 2026-03-18 00:13:58,043 ] 53 root - INFO - Initialise KNNImputer with {'missing_values': nan, 'n_neighbors': 3, 'weights': 'uniform'}
+[ 2026-03-18 00:13:58,059 ] 60 root - INFO - Saving object...
+[ 2026-03-18 00:13:58,065 ] 66 root - INFO - Object saved successfully
+[ 2026-03-18 00:13:58,065 ] 60 root - INFO - Saving object...
+[ 2026-03-18 00:13:58,069 ] 66 root - INFO - Object saved successfully
+[ 2026-03-18 00:13:58,071 ] 35 root - INFO - data Transformation completed
+[ 2026-03-18 00:13:58,071 ] 37 root - INFO - Model Training sstared
+[ 2026-03-18 00:13:58,094 ] 91 root - INFO - Training model: Random Forest
+[ 2026-03-18 00:14:05,542 ] 91 root - INFO - Training model: Decision Tree
+[ 2026-03-18 00:14:09,344 ] 91 root - INFO - Training model: Gradient Boosting
+[ 2026-03-18 00:14:44,626 ] 91 root - INFO - Training model: Logistic Regression
+[ 2026-03-18 00:14:44,727 ] 91 root - INFO - Training model: AdaBoost
+[ 2026-03-18 00:15:07,731 ] 60 root - INFO - Saving object...
+[ 2026-03-18 00:15:07,763 ] 66 root - INFO - Object saved successfully
+[ 2026-03-18 00:15:07,763 ] 132 root - INFO - Model trainer artifact: ModelTrainerArtifact(trained_model_file_path='Artifacts\\03_18_2026_00_13_46\\model_trainer\\trained_model\\model.pkl', train_metric_artifact=ClassificationMetricArtifact(f1_score=0.9906297229219143, precision_score=0.988140703517588, recall_score=0.9931313131313131), test_metric_artifact=ClassificationMetricArtifact(f1_score=0.9777227722772277, precision_score=0.9737058340180772, recall_score=0.9817729908864954))
+[ 2026-03-18 00:15:07,767 ] 42 root - INFO - Model Training artifact created

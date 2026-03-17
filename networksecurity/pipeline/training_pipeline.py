@@ -25,15 +25,15 @@ from networksecurity.entity.artifact_entity import (
 )
 
 from networksecurity.constant.training_pipeline import TRAINING_BUCKET_NAME
-from networksecurity.cloud.s3_syncer import S3Sync
-from networksecurity.constant.training_pipeline import SAVED_MODEL_DIR
+#from networksecurity.cloud.s3_syncer import S3Sync
+#from networksecurity.constant.training_pipeline import SAVED_MODEL_DIR
 import sys
 
 
 class TrainingPipeline:
     def __init__(self):
         self.training_pipeline_config=TrainingPipelineConfig()
-        self.s3_sync = S3Sync()
+        #self.s3_sync = S3Sync()
         
 
     def start_data_ingestion(self):
@@ -108,16 +108,13 @@ class TrainingPipeline:
     
     def run_pipeline(self):
         try:
-            data_ingestion_artifact=self.start_data_ingestion()
-            data_validation_artifact=self.start_data_validation(data_ingestion_artifact=data_ingestion_artifact)
-            data_transformation_artifact=self.start_data_transformation(data_validation_artifact=data_validation_artifact)
-            model_trainer_artifact=self.start_model_trainer(data_transformation_artifact=data_transformation_artifact)
-            
-            self.sync_artifact_dir_to_s3()
-            self.sync_saved_model_dir_to_s3()
-            
+            data_ingestion_artifact = self.start_data_ingestion()
+            data_validation_artifact = self.start_data_validation(data_ingestion_artifact)
+            data_transformation_artifact = self.start_data_transformation(data_validation_artifact)
+            model_trainer_artifact = self.start_model_trainer(data_transformation_artifact)
+
             return model_trainer_artifact
+
         except Exception as e:
-            raise NetworkSecurityException(e,sys)
-        
+            raise NetworkSecurityException(e, sys)
     
