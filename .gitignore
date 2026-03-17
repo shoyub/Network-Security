@@ -1,2 +1,19 @@
-venv
+# Generated folders
+Artifacts/
+final_model/model.pkl
+mlruns/
+__pycache__/
+*.pyc
+
+# Environment
 .env
+venv/
+.venv/
+
+# Cache
+.pytest_cache/
+*.egg-info/
+
+# Logs
+logs/
+*.log

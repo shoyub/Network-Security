@@ -1,29 +1,46 @@
-### Network Security Projects For Phising Data
+````markdown
+# Phishing Detection System
 
-Setup github secrets:
-AWS_ACCESS_KEY_ID=
+ML-powered web app that detects phishing URLs using hybrid scoring (ML model + heuristic patterns).
 
-AWS_SECRET_ACCESS_KEY=
+## Quick Start
 
-AWS_REGION = us-east-1
+```bash
+pip install -r requirements.txt
+python app.py
+# Open http://localhost:8000/
+```
+````
 
-AWS_ECR_LOGIN_URI = 788614365622.dkr.ecr.us-east-1.amazonaws.com/networkssecurity
-ECR_REPOSITORY_NAME = networkssecurity
+## 3 Main Features
 
+**01 Model Training** - Click "Initialize Training" (10-30 mins, one-time)
 
-Docker Setup In EC2 commands to be Executed
-#optinal
+- Trains 4 ML algorithms: Random Forest, AdaBoost, Gradient Boosting, Logistic Regression
+- Saves best model to `final_model/model.pkl`
 
-sudo apt-get update -y
+**02 CSV Prediction** - Upload phishing dataset for batch analysis
 
-sudo apt-get upgrade
+- Predicts all rows instantly
+- Returns results table
 
-#required
+**03 URL Prediction** - Enter any URL for real-time analysis
 
-curl -fsSL https://get.docker.com -o get-docker.sh
+- **ML Score**: Model confidence (0-100%)
+- **Risk Score**: Pattern-based heuristics (0-100)
+- Final verdict: 🚨 Phishing or ✅ Legitimate
 
-sudo sh get-docker.sh
+## Key Files
 
-sudo usermod -aG docker ubuntu
+| File                        | Purpose                         |
+| --------------------------- | ------------------------------- |
+| app.py                      | FastAPI backend (7 routes)      |
+| `templates/index.html`      | Main UI with 3 sections         |
+| `url_feature_extraction.py` | URL parser + heuristic scorer   |
+| training_pipeline.py        | ML model training orchestration |
+| `final_model/model.pkl`     | Pre-trained model               |
+| `phisingData.csv`           | 11,000 training samples         |
 
-newgrp docker
+## Tech Stack
+
+FastAPI • scikit-learn • Pandas • MongoDB • Docker
