@@ -1,0 +1,10 @@
+[ 2026-03-17 16:58:28,121 ] 20 root - INFO - Initiate the data ingestion
+[ 2026-03-17 16:58:31,646 ] 77 root - INFO - Performed train-test split
+[ 2026-03-17 16:58:31,707 ] 94 root - INFO - Train and test files saved successfully
+[ 2026-03-17 16:58:31,707 ] 22 root - INFO - Data Initiation Completed
+[ 2026-03-17 16:58:31,714 ] 26 root - INFO - Initiate the data Validation
+[ 2026-03-17 16:58:31,802 ] 32 root - INFO - Required number of columns:2
+[ 2026-03-17 16:58:31,802 ] 33 root - INFO - Data frame has columns:31
+[ 2026-03-17 16:58:31,802 ] 32 root - INFO - Required number of columns:2
+[ 2026-03-17 16:58:31,802 ] 33 root - INFO - Data frame has columns:31
+[ 2026-03-17 16:58:31,952 ] 28 root - INFO - data Validation Completed

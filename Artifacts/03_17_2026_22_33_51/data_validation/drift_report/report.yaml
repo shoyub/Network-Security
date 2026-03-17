@@ -1,0 +1,93 @@
+Abnormal_URL:
+  drift_status: false
+  p_value: 1.0
+DNSRecord:
+  drift_status: false
+  p_value: 0.98068847421368
+Domain_registeration_length:
+  drift_status: false
+  p_value: 0.9999998996954222
+Favicon:
+  drift_status: false
+  p_value: 0.8558815726192632
+Google_Index:
+  drift_status: false
+  p_value: 0.9659080032037665
+HTTPS_token:
+  drift_status: false
+  p_value: 1.0
+Iframe:
+  drift_status: false
+  p_value: 0.9999999991050752
+Links_in_tags:
+  drift_status: false
+  p_value: 0.9998728965778992
+Links_pointing_to_page:
+  drift_status: false
+  p_value: 1.0
+Page_Rank:
+  drift_status: false
+  p_value: 0.7168453975391859
+Prefix_Suffix:
+  drift_status: false
+  p_value: 1.0
+Redirect:
+  drift_status: false
+  p_value: 0.9786058095826133
+Request_URL:
+  drift_status: false
+  p_value: 0.9999999999598222
+Result:
+  drift_status: false
+  p_value: 0.9086653866244705
+RightClick:
+  drift_status: false
+  p_value: 0.9935243434380693
+SFH:
+  drift_status: false
+  p_value: 0.999999999999956
+SSLfinal_State:
+  drift_status: false
+  p_value: 1.0
+Shortining_Service:
+  drift_status: false
+  p_value: 0.9659080032037665
+Statistical_report:
+  drift_status: false
+  p_value: 1.0
+Submitting_to_email:
+  drift_status: false
+  p_value: 0.9982529381226167
+URL_Length:
+  drift_status: false
+  p_value: 1.0
+URL_of_Anchor:
+  drift_status: false
+  p_value: 0.9826271842488499
+age_of_domain:
+  drift_status: false
+  p_value: 0.9999999999876384
+double_slash_redirecting:
+  drift_status: false
+  p_value: 0.9999998996954222
+having_At_Symbol:
+  drift_status: false
+  p_value: 0.9999999947754254
+having_IP_Address:
+  drift_status: false
+  p_value: 1.0
+having_Sub_Domain:
+  drift_status: false
+  p_value: 0.13093293636307332
+on_mouseover:
+  drift_status: false
+  p_value: 0.9985597993583677
+popUpWidnow:
+  drift_status: false
+  p_value: 0.98068847421368
+port:
+  drift_status: false
+  p_value: 0.9974838014331485
+web_traffic:
+  drift_status: false
+  p_value: 0.9786058095826133
